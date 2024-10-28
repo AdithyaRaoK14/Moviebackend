@@ -3,13 +3,10 @@
     "sourceMap": true,
     "outDir": "./dist",
     "rootDir": "./src",
-    "strict": true,                  // Enforce strict type checking
-    "lib": ["ESNext"],
+    "strict": false,
+    "lib": ["esnext"],
     "esModuleInterop": true,
-    "declaration": true,
-    "module": "commonjs",             // Ensures compatibility with Node.js
-    "target": "ES6",                  // Target ES6 for better Node.js compatibility
-    "moduleResolution": "node"        // Allows Node-style module resolution
+    "declaration": true
   },
   "include": ["src/**/*.ts"]
 }
