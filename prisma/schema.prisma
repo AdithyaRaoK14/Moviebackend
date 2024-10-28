@@ -1,0 +1,72 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String      @id @default(uuid())
+  password  String
+  email     String      @unique
+  firstName String
+  lastName  String
+  createdAt DateTime    @default(now())
+  role      String      @default("USER")
+  genres    String      @default("[]")
+  WatchList WatchList[]
+  Comment   Comment[]
+  Rating    Rating[]
+}
+
+model Movie {
+  id          Int         @id
+  title       String
+  year        String?
+  description String
+  imdbRating  Float?
+  createdAt   DateTime    @default(now())
+  poster      String
+  background  String
+  WatchList   WatchList[]
+  Comment     Comment[]
+  Rating      Rating[]
+}
+
+model WatchList {
+  userId    String
+  movieId   Int
+  createdAt DateTime @default(now())
+  movie     Movie    @relation(fields: [movieId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@id([userId, movieId])
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  comment   String
+  createdAt DateTime @default(now())
+  movieId   Int
+  userId    String
+  movie     Movie    @relation(fields: [movieId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([id, userId])
+}
+
+model Rating {
+  id         String @id @default(uuid())
+  userRating Float
+  userId     String
+  movieId    Int
+  movie      Movie  @relation(fields: [movieId], references: [id])
+  user       User   @relation(fields: [userId], references: [id])
+
+  @@unique([userId, movieId])
+}
